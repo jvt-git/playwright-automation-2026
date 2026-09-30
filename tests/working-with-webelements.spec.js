@@ -117,7 +117,7 @@ test('Drag and Drop operations', async ({ page }) => {
     await item_to_drag_WriteTest.dragTo(in_process_column);
     const item_in_progress_card = page.locator('#drag-item-4');
     const done_column = page.locator('#col-done');
-     //  Drag >>>
+    //  Drag >>>
     await item_to_drag_WriteTest.dragTo(in_process_column);
     //  Manual drag >>>
     await item_in_progress_card.hover();
@@ -126,5 +126,43 @@ test('Drag and Drop operations', async ({ page }) => {
     await done_column.hover();
     // releasing mouse button to dropp it 
     await page.mouse.up();
+
+})
+
+
+test('Handling scrolling', async ({ page }) => {
+    await page.goto('http://localhost:3000')
+    await page.getByText('Scrollbars').first().click();
+    const footer_course_link = page.locator('#footer-courses');
+    const vertical_scroll_container = page.locator('#vertical-scroll-box');
+    // Scrolls automatically so that button is visible
+    await footer_course_link.scrollIntoViewIfNeeded();
+    // Position the mouse and scroll with the mouse wheel (0 horizontal, 10 vertical)
+    await vertical_scroll_container.hover();
+    await page.mouse.wheel(0, 1000);
+    // Alternatively, programmatically scroll a specific element
+    await vertical_scroll_container.evaluate(e => e.scrollTop += 300);
+
+})
+
+test('Handling sliders', async ({ page }) => {
+    await page.goto('http://localhost:3000')
+    await page.getByText('Horizontal Slider').first().click();
+    const temperature_slider = page.locator('#temp-slider');
+    await temperature_slider.scrollIntoViewIfNeeded();
+    const bbox = await temperature_slider.boundingBox();
+    // centre of bbox
+    const x = bbox.x + bbox.width / 2;
+    const y = bbox.y + bbox.height / 2;
+    await page.mouse.move(x, y);
+    await page.mouse.down()
+    // to the left x-1oo , to the right +100
+    await page.mouse.move(x - 100, y + 0);
+    await page.mouse.up();
+    await page.mouse.down()
+    await page.mouse.move(x + 100, y + 0);
+    await page.mouse.up();
+
+
 
 })
