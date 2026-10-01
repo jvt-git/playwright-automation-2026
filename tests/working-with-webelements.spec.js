@@ -162,7 +162,42 @@ test('Handling sliders', async ({ page }) => {
     await page.mouse.down()
     await page.mouse.move(x + 100, y + 0);
     await page.mouse.up();
+})
 
+test('Handling iframes', async ({ page }) => {
+    await page.goto('http://localhost:3000')
+    await page.getByText('IFrame').first().click();
+    // inside iframe
+    const first_iframe = page.frameLocator('#internal-iframe');
+    await first_iframe.locator('#iframe-name-input').fill("JVT academy");
+    // outside iframe
+    await page.locator('#header-home').click();
+})
 
+test('Handling JS Alerts', async ({ page }) => {
+    await page.goto('http://localhost:3000')
+    await page.getByText('JS Alert').first().click();
+    const atert_btn = page.locator('#trigger-alert-btn');
+    await atert_btn.click();
+
+    await page.getByText('JS Confirm').first().click();
+    const confirm_btn = page.locator('#trigger-confirm-btn');
+    // dialog listener set before confirmation.click
+    page.once('dialog', async dialog => {
+        console.log(dialog.message());
+        await dialog.accept();
+    })
+
+    await confirm_btn.click();
+
+    await page.getByText('JS Prompt').first().click();
+    const prompt_btn = page.locator('#trigger-prompt-btn');
+    page.once('dialog', async dialog => {
+        console.log(dialog.message());
+        await dialog.accept("JVT ACADEMY");
+    })
+
+   await prompt_btn.click();
 
 })
+
