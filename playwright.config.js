@@ -17,7 +17,7 @@ export default defineConfig({
 });
 
 
-
+require('dotenv').config();
 
   /* Configure projects for major browsers */
   // projects: [

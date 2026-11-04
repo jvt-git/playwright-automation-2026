@@ -1,0 +1,48 @@
+
+const path = require("path");
+const fs = require("fs");
+const { parse } = require("csv-parse/sync");
+
+async function writeDataToFile(filename, data, encoding = "utf8") {
+    try {
+        const filepath = path.join(process.cwd(), "testdata", filename);
+        await fs.promises.writeFile(filepath, data, encoding);
+        console.log(`File with name ${filename} written successfully`);
+    } catch (error) {
+        console.log(`Error writing the file ${filename}`, error);
+        throw error;
+    }
+}
+
+async function readDataFromFile(filename, encoding = "utf8") {
+    try {
+        const filepath = path.join(process.cwd(), "testdata", filename);
+        const data = await fs.promises.readFile(filepath, encoding);
+        console.log(`Successfully read data from file ${filename}`);
+        return data;
+    } catch (error) {
+        console.log(`Error reading the file ${filename}`, error);
+        throw error;
+    }
+}
+
+function readCSV(filename, encoding = "utf8") {
+    try {
+        const filepath = path.join(process.cwd(), "testdata", filename);
+        const csvFileContent = fs.readFileSync(filepath, encoding);
+
+        return parse(csvFileContent, {
+            columns: true,
+            skip_empty_lines: true
+        });
+    } catch (error) {
+        console.log(`Error reading CSV file ${filename}`, error);
+        throw error;
+    }
+}
+
+module.exports = {
+    readCSV,
+    readDataFromFile,
+    writeDataToFile
+};
