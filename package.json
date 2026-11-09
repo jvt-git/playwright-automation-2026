@@ -3,7 +3,12 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
-  "scripts": {},
+  "scripts": {
+    "test:qa": "cross-env TEST_ENV=qa npx playwright test add-to-cart-json",
+    "test:qa:regression": "cross-env TEST_ENV=qa npx playwright test --grep '@reg'",
+    "test:staging": "cross-env TEST_ENV=staging npx playwright test add-to-cart",
+    "test:dev": "cross-env TEST_ENV=dev npx playwright test add-to-cart"
+  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/jvt-git/playwright-automation-2026.git"
@@ -18,7 +23,8 @@
   "homepage": "https://github.com/jvt-git/playwright-automation-2026#readme",
   "devDependencies": {
     "@playwright/test": "^1.63.0",
-    "@types/node": "^26.4.1"
+    "@types/node": "^26.4.1",
+    "cross-env": "^10.1.0"
   },
   "dependencies": {
     "csv-parse": "^7.0.3",

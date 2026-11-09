@@ -1,23 +1,130 @@
-// @ts-check
+//@ts-check
 import { defineConfig, devices } from '@playwright/test';
+import dotenv from 'dotenv';
+import fs from 'fs';
+
+// needed for .env files to process
+const envFile = `.env.${process.env.TEST_ENV || 'dev'}`
+
+if (fs.existsSync(envFile)) {
+  dotenv.config({ path: envFile });
+} else {
+  dotenv.config();
+}
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: true,
-  reporter: 'html',
-  timeout: 45000, 
+  fullyParallel: false, 
+  // or true
+  workers: 4,
+
+reporter: [
+  ['list'],
+  ['html', { outputFolder: 'reports' }]
+],
+  // reporter: process.env.CI ? 'github' : 'html',
+  timeout: 30000,
+  retries: 1,
   expect: {
-    timeout:10000,
+    timeout: 10000,
   },
   use: {
-    trace: 'on-first-retry',
+    trace: 'retain-on-first-failure',
     browserName: 'chromium',
-    headless: false,
+    headless: true,
+    locale: 'en-US',
+    timezoneId: 'America/Los_Angeles',
+    colorScheme: 'light',
+    ignoreHTTPSErrors: true,
+    screenshot: 'on-first-failure',
+    video: 'on-first-retry'
   },
+  projects: [
+    {
+      name: 'chrome',
+      use: {
+        ...devices['Desktop Chrome'],
+        // headless: false,
+        // viewport: { width: 200, height: 100 },
+        locale: 'en-US',
+        timezoneId: 'America/Los_Angeles',
+        colorScheme: 'light',
+        ignoreHTTPSErrors: true
+      }
+    },
+    // įjungti testus kitose naršyklėse
+    // {
+    //   name: 'firefox',
+    //   use: {
+    //     ...devices['Desktop Firefox'],
+    //     // headless: false,
+    //   }
+    // },
+    // {
+    //   name: 'safari',
+    //   use: {
+    //     ...devices['Desktop Safari'],
+    //   }
+    // },
+
+
+
+
+    // {
+    //   name: 'iPhone15-pro-landscape',
+    //   use: {
+    //     ...devices['iPhone 15 Pro landscape'],
+    //     headless: false,
+    //   }
+    // }
+  ]
 });
 
 
-require('dotenv').config();
+// // @ts-check
+// import { defineConfig, devices } from '@playwright/test';
+
+// export default defineConfig({
+//   testDir: './tests',
+//   fullyParallel: true,
+//   reporter: 'html',
+//   timeout: 45000, 
+//   expect: {
+//     timeout:10000,
+//   },
+//   use: {
+//     trace: 'on-first-retry',
+//     browserName: 'chromium',
+//     headless: false,
+//   },
+// });
+
+
+// require('dotenv').config();
+
+
+// import { defineConfig } from '@playwright/test';
+// import dotenv from 'dotenv';
+
+// dotenv.config();
+
+// export default defineConfig({
+//     testDir: './tests',
+//     fullyParallel: true,
+//     reporter: 'html',
+//     timeout: 45000,
+
+//     expect: {
+//         timeout: 10000,
+//     },
+
+//     use: {
+//         trace: 'on-first-retry',
+//         browserName: 'chromium',
+//         headless: false,
+//     },
+// });
+
 
   /* Configure projects for major browsers */
   // projects: [

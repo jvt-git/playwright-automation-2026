@@ -9,7 +9,7 @@ test("Update personal information", async ({ page }) => {
     const myProfilePage = new MyProfilePage(page);
 
     // Log in to eCommerce portal - Login should be successful
-   await loginPage.openTestApp("http://localhost:3000/store/login");
+    await loginPage.openTestApp("http://localhost:3000/store/login");
     await loginPage.login("julijvt@yahoo.com", "Jvt1234512345")
 
     // Click on “User → My profile” - “Personal Information” page opens
@@ -20,7 +20,7 @@ test("Update personal information", async ({ page }) => {
     await myProfilePage.addNewPhoneNumber("+370987654321");
     await myProfilePage.clickSaveChangesButton();
     await myProfilePage.checkIfTheProfileGotUpdatedSuccessfully("Personal information updated successfully.");
-    
+
     // Click on “Sign out” - User should get logged off
     topMenuPage.logoutFromApp();
 

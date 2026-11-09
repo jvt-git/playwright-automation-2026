@@ -1,10 +1,33 @@
-const { test } = require("@playwright/test");
-const { LoginPage } = require("../../pages/LoginPage");
-const { DashboardPage } = require("../../pages/DashboardPage");
-const { ProductDetailsPage } = require("../../pages/ProductDetailsPage");
-const { TopMenuPage } = require("../../pages/TopMenuPage");
-const { readDataFromFile, readCSV } = require("../../utils/fileUtils");
+require('dotenv').config();
 
+const { test } = require('@playwright/test');
+const { LoginPage } = require('../../pages/LoginPage');
+const { DashboardPage } = require('../../pages/DashboardPage');
+const { ProductDetailsPage } = require('../../pages/ProductDetailsPage');
+const { TopMenuPage } = require('../../pages/TopMenuPage');
+const { readCSV } = require('../../utils/fileUtils');
+
+// NEED TO CHANGE IN THE package.json  "scripts": { "test:qa": "cross-env TEST_ENV=qa npx playwright test add-to-cart"
+
+// test.skip > Naudojamas, kai nori praleisti testą >Testas nebus vykdomas
+// test.fail > pass > Naudojamas, kai tikiesi, kad testas turi failinti
+// test.fixme > Naudojamas, kai testas yra žinomas kaip neveikiantis arba nebaigtas, ir jo kol kas nereikia vykdyti
+// test.slow >  Playwright padidina testo timeout’ą 3 kartus > testas vygdomas lėtai
+// test.only > paleidžia tik šį testą, visus kitus ignoruoja
+// test.describe > grupuoja susijusius testus
+
+// test.describe('Function1 or Login functionality tests', ()=>{
+//     test('this is test 1', async({page})=> {
+
+//     })
+//      test('this is test 2', async({page})=> {
+        
+//     })
+//      test('this is test 3', async({page})=> {
+        
+//     })
+// }) 
+// OR this way >  test("@smoke Product search and add to cart", async ({ page }) =>
 test("Product search and add to cart", { tag: ['@reg', '@smoke'] }, async ({ page }) => {
 
     const loginPage = new LoginPage(page);
@@ -12,11 +35,10 @@ test("Product search and add to cart", { tag: ['@reg', '@smoke'] }, async ({ pag
     const productDetailsPage = new ProductDetailsPage(page);
     const topMenuPage = new TopMenuPage(page);
 
-    console.log("BASE_URL:", process.env.BASE_URL);
     const td = await readCSV('testData.csv');
-    console.log("CSV duomenys:", td);
+    console.log(td);
+    // first line in the file 
     const { product, itemsInCart } = td[0];
-    console.log("Pirmas įrašas:", td[0]);
 
     // Login using valid credentials - Login is successful 
     await loginPage.openTestApp(process.env.BASE_URL + '/login');
@@ -43,5 +65,3 @@ test("Product search and add to cart", { tag: ['@reg', '@smoke'] }, async ({ pag
 
 
 });
-
-
