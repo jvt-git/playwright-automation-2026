@@ -9,7 +9,9 @@ class LoginPage {
     async login(username, password) {
         await this.username_field.fill(username);
         await this.password_field.fill(password);
-        await this.loginButton.click();
+        // await this.loginButton.scrollIntoViewIfNeeded();
+        // await this.loginButton.waitFor({ state: 'visible' });
+        await this.loginButton.click({ force: true });
     }
 
     async openTestApp(url) {

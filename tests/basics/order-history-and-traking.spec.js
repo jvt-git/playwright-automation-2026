@@ -5,7 +5,7 @@ const { MyOrdersPage } = require("../../pages/MyOrdersPage");
 const { OrderDetailsPage } = require("../../pages/OrderDetailsPage");
 const { MyProfilePage } = require("../../pages/MyProfilePage");
 
-// test.describe.configure({mode: 'serial'});
+// test.describe.configure({mode: 'serial'}); > playw.config.js file setting>  fullyParallel: false/true 
 test.describe.serial("Serial tests", () =>{
 test("Order history and tracking", async ({ page }) => {
 

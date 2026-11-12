@@ -14,21 +14,27 @@ if (fs.existsSync(envFile)) {
 
 export default defineConfig({
   testDir: './tests',
-  fullyParallel: false, 
-  // or true
-  workers: 4,
+  // workers are test number > fullyParallel true > every test run as separate worker, if 
+  // false . need to setup workers
+  fullyParallel: false,
+  // workers can be 1, 2, 3
+  workers: 1,
 
-reporter: [
-  ['list'],
-  ['html', { outputFolder: 'reports' }]
-],
+  reporter: [
+    ['list'],
+    ['html', { outputFolder: 'reports' }]
+  ],
   // reporter: process.env.CI ? 'github' : 'html',
   timeout: 30000,
+  // haw many times ti retry 1 , 2 or 3
   retries: 1,
   expect: {
     timeout: 10000,
   },
+
+  // for all projects
   use: {
+    // trace: 'retain-on-first-retry',
     trace: 'retain-on-first-failure',
     browserName: 'chromium',
     headless: true,
@@ -41,18 +47,20 @@ reporter: [
   },
   projects: [
     {
+      // specific project
       name: 'chrome',
       use: {
         ...devices['Desktop Chrome'],
-        // headless: false,
+        headless: false,
         // viewport: { width: 200, height: 100 },
+        // Emulation options at www.playwright.com
         locale: 'en-US',
         timezoneId: 'America/Los_Angeles',
-        colorScheme: 'light',
-        ignoreHTTPSErrors: true
+        colorScheme: 'dark',
+        ignoreHTTPSErrors: false
       }
     },
-    // įjungti testus kitose naršyklėse
+    // įjungti testus kitose naršyklėse > npx playwright test order-history-and-tracking  --project='safari'
     // {
     //   name: 'firefox',
     //   use: {
@@ -60,23 +68,25 @@ reporter: [
     //     // headless: false,
     //   }
     // },
-    // {
-    //   name: 'safari',
-    //   use: {
-    //     ...devices['Desktop Safari'],
-    //   }
-    // },
+    {
+      name: 'safari',
+      use: {
+        ...devices['Desktop Safari'],
+      }
+    },
 
 
+    // įjungti testus mobiliųjų telefonų atvaizdavime > 
+    // npx playwright test --project="iPhone15-pro-landscape" -g "Serial tests"
+    // npx playwright test order-history-and-tracking  --project='iPhone15-pro-landscape'
 
-
-    // {
-    //   name: 'iPhone15-pro-landscape',
-    //   use: {
-    //     ...devices['iPhone 15 Pro landscape'],
-    //     headless: false,
-    //   }
-    // }
+    {
+      name: 'iPhone15-pro-landscape',
+      use: {
+        ...devices['iPhone 15 Pro landscape'],
+        headless: false,
+      }
+    }
   ]
 });
 
@@ -126,48 +136,48 @@ reporter: [
 // });
 
 
-  /* Configure projects for major browsers */
-  // projects: [
-  //   {
-  //     name: 'chromium',
-  //     use: { ...devices['Desktop Chrome'] },
-  //   },
+/* Configure projects for major browsers */
+// projects: [
+//   {
+//     name: 'chromium',
+//     use: { ...devices['Desktop Chrome'] },
+//   },
 
-  //   {
-  //     name: 'firefox',
-  //     use: { ...devices['Desktop Firefox'] },
-  //   },
+//   {
+//     name: 'firefox',
+//     use: { ...devices['Desktop Firefox'] },
+//   },
 
-  //   {
-  //     name: 'webkit',
-  //     use: { ...devices['Desktop Safari'] },
-  //   },
+//   {
+//     name: 'webkit',
+//     use: { ...devices['Desktop Safari'] },
+//   },
 
-  //   /* Test against mobile viewports. */
-  //   // {
-  //   //   name: 'Mobile Chrome',
-  //   //   use: { ...devices['Pixel 5'] },
-  //   // },
-  //   // {
-  //   //   name: 'Mobile Safari',
-  //   //   use: { ...devices['iPhone 12'] },
-  //   // },
+//   /* Test against mobile viewports. */
+//   // {
+//   //   name: 'Mobile Chrome',
+//   //   use: { ...devices['Pixel 5'] },
+//   // },
+//   // {
+//   //   name: 'Mobile Safari',
+//   //   use: { ...devices['iPhone 12'] },
+//   // },
 
-  //   /* Test against branded browsers. */
-  //   // {
-  //   //   name: 'Microsoft Edge',
-  //   //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
-  //   // },
-  //   // {
-  //   //   name: 'Google Chrome',
-  //   //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
-  //   // },
-  // ],
+//   /* Test against branded browsers. */
+//   // {
+//   //   name: 'Microsoft Edge',
+//   //   use: { ...devices['Desktop Edge'], channel: 'msedge' },
+//   // },
+//   // {
+//   //   name: 'Google Chrome',
+//   //   use: { ...devices['Desktop Chrome'], channel: 'chrome' },
+//   // },
+// ],
 
-  /* Run your local dev server before starting the tests */
-  // webServer: {
-  //   command: 'npm run start',
-  //   url: 'http://localhost:3000',
-  //   reuseExistingServer: !process.env.CI,
-  // },
+/* Run your local dev server before starting the tests */
+// webServer: {
+//   command: 'npm run start',
+//   url: 'http://localhost:3000',
+//   reuseExistingServer: !process.env.CI,
+// },
 
